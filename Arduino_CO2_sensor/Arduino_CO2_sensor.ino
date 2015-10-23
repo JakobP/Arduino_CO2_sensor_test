@@ -1,5 +1,6 @@
 // Based on this: https://hackaday.io/project/3475-sniffing-trinket/log/12363-mq135-arduino-library
 // MQ135 library by Georg Krocker: https://github.com/GeorgK/MQ135
+// Technical explanation of how MQ135 can measure CO2: http://davidegironi.blogspot.com/2014/01/cheap-co2-meter-using-mq135-sensor-with.html#.ViqEAxArIUE
 // RunningAverage library by Rob Tillaart: http://playground.arduino.cc/Main/RunningAverage
 // How to connect MQ135 sensor: https://www.youtube.com/watch?v=BIf_mpnsZvY
 
