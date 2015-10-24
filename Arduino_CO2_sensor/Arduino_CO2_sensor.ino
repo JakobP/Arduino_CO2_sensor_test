@@ -18,11 +18,12 @@ DHT dht(DHTPIN, DHTTYPE); // Initialize sensor
 
 //MQ135.h config
 MQ135 gasSensor = MQ135(0);
-float rzero = gasSensor.getRZero();
-//#define RZERO 76.63
+//float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and change it IN THE MQ135.h LIBRARY. Each sensor is different and this makes the PPM calculation work.
 
-//RunningAverage.h config
-RunningAverage runningAverage(10);
+//RunningAverage.h variables
+RunningAverage averageCo2(300);
+RunningAverage averageTemperature(300);
+RunningAverage averageHumidity(300);
 int samples = 0;
 
 
@@ -31,38 +32,48 @@ void setup() {
 
   dht.begin(); // Not sure what this does
   
-  runningAverage.clear(); // explicitly start RunningAverageclean
+  averageCo2.clear(); // explicitly start RunningAverageclean
 }
 
 void loop() {
 
-
-/*============ BEGIN MQ135 ===================*/
-  // Get and echo CO2 PPM
-  float ppm = gasSensor.getPPM();
-  Serial.print("Current PPM reading: ");
-  Serial.println(ppm);
-
-  // Calculate and echo running average of PPM. Only trigger on readings above 200 PPM to sort out bad sensor data
-  // Since we measure indoors we can be pretty sure that the CO2 level is above 300 PPM, which is what you would expect outdoors in the countryside. Cities tend to have around 500 PPM outside.
-  if(ppm>200)
-  {
-    runningAverage.addValue(ppm);  
-    Serial.print("Running Average: ");
-    Serial.println(runningAverage.getAverage(), 0);
-    samples++;
-  }
+  // Functions for priting lots of data
+  co2Print();
+  dhtPrint();
+  
+  samples++;
   
   //Reset runningAverage to 0 after 300 readings
   if (samples == 300)
   {
     samples = 0;
-    runningAverage.clear();
+    averageCo2.clear();
     Serial.print("RESET Running Average");
   }
-/*============ END MQ135 ===================*/
 
-/*============ BEGIN DHT22 ===================*/
+
+
+
+
+  delay(1000);
+}
+
+ 
+// Get and print CO2 PPM
+void co2Print(){
+  float ppm = gasSensor.getPPM();
+  Serial.print("Current PPM reading: ");
+  Serial.print(ppm);
+
+  Serial.print(" \t");
+
+  averageCo2.addValue(ppm);  
+  Serial.print("Running Average: ");
+  Serial.println(averageCo2.getAverage(), 0);
+}
+
+// Get and print temperature and humidity from DHT22
+void dhtPrint(){
 // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   float h = dht.readHumidity();
@@ -85,6 +96,7 @@ void loop() {
   Serial.print("Humidity: ");
   Serial.print(h);
   Serial.print(" %\t");
+  Serial.print(" \t");
   Serial.print("Temperature: ");
   Serial.print(t);
   Serial.print(" *C ");
@@ -95,13 +107,5 @@ void loop() {
   Serial.print(" *C ");
   Serial.print(hif);
   Serial.println(" *F");
-
-/*============ END DHT22 ===================*/
-
-
-  delay(1000);
 }
-
-
-
 
