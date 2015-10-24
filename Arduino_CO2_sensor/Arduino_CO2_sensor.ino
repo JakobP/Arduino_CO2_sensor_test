@@ -27,9 +27,19 @@ RunningAverage averageTemperature(300);
 RunningAverage averageHumidity(300);
 int samples = 0;
 
+//LED config
+int co2Led3= 3; // red
+int co2Led4 = 4; // green
+
+
+
 void setup() {
   Serial.begin(9600);      // sets the serial port to 9600
   dht.begin(); // Not sure what this does
+
+  // Setup of LEDs
+  //pinMode(co2Led3, OUTPUT);
+  pinMode(co2Led4, OUTPUT);
 
   // Ensures that we are starting with empty running averages
   averageCo2.clear();
@@ -38,6 +48,7 @@ void setup() {
 }
 
 void loop() {
+  digitalWrite(3, HIGH);
   // Get the values
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
@@ -57,14 +68,19 @@ void loop() {
   averageTemperature.addValue(temperature);
   averageHumidity.addValue(humidity);
 
+  float averageCo2Float = averageCo2.getAverage();
+  float averageTemperatureFloat = averageTemperature.getAverage();
+  float averageHumidityFloat = averageHumidity.getAverage();
+
+
   Serial.print("Avg. CO2:\t");
-  Serial.print(averageCo2.getAverage(), 0);
+  Serial.print(averageCo2Float);
   Serial.print("\t");
   Serial.print("Avg. temperature:\t");
-  Serial.print(averageTemperature.getAverage(), 0);
+  Serial.print(averageTemperatureFloat);
   Serial.print("\t");
   Serial.print("Avg. humidity:\t");
-  Serial.println(averageHumidity.getAverage(), 0);
+  Serial.println(averageHumidityFloat);
 
   // Increase the sample count
   samples++;
@@ -79,6 +95,8 @@ void loop() {
     averageHumidity.clear();
     Serial.print("RESET Running Averages");
   }
+
+updateLedsCo2(averageCo2Float);
 
   delay(1000);
 }
@@ -96,5 +114,19 @@ float getHumidity(){
 float getTemperature(){
   float temperature = dht.readTemperature();
   return temperature;
+}
+
+void updateLedsCo2(float averageCo2Float){
+  if(averageCo2Float<3000){
+    Serial.println("CO2 below 3000");
+    digitalWrite(co2Led3, LOW);
+    digitalWrite(co2Led4, HIGH);
+  }
+  if(averageCo2Float>=3000){
+    Serial.println("CO2 above 3000");
+    digitalWrite(co2Led3, HIGH);
+    digitalWrite(co2Led4, LOW);
+  }
+
 }
 
