@@ -27,7 +27,6 @@ RunningAverage averageTemperature(300);
 RunningAverage averageHumidity(300);
 int samples = 0;
 
-
 void setup() {
   Serial.begin(9600);      // sets the serial port to 9600
   dht.begin(); // Not sure what this does
@@ -39,13 +38,6 @@ void setup() {
 }
 
 void loop() {
-
-  // Functions for priting lots of data
-  //co2Print();
-  //dhtPrint();
-  
-
-
   // Get the values
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
@@ -83,13 +75,13 @@ void loop() {
   {
     samples = 0;
     averageCo2.clear();
-    Serial.print("RESET Running Average");
+    averageTemperature.clear();
+    averageHumidity.clear();
+    Serial.print("RESET Running Averages");
   }
 
   delay(1000);
 }
-
-
 
 float getCo2(){
   float ppm = gasSensor.getPPM();
@@ -104,37 +96,5 @@ float getHumidity(){
 float getTemperature(){
   float temperature = dht.readTemperature();
   return temperature;
-}
-
-
- 
-/* Print CO2 PPM */
-void co2Print(){
-  float ppm = gasSensor.getPPM();
-  Serial.print("CO2 PPM: ");
-  Serial.println(ppm);
-}
-
-/* Get and print temperature and humidity from DHT22 */
-void dhtPrint(){
-// Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-
-
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(h) || isnan(t)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
-  }
-
-  Serial.print("Humidity: ");
-  Serial.print(h);
-  Serial.print(" %\t");
-  Serial.print("Temperature: ");
-  Serial.print(t);
-  Serial.println(" *C ");
 }
 
