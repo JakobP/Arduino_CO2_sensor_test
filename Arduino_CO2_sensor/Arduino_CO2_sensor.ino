@@ -38,7 +38,7 @@ void setup() {
   dht.begin(); // Not sure what this does
 
   // Setup of LEDs
-  //pinMode(co2Led3, OUTPUT);
+  pinMode(co2Led3, OUTPUT);
   pinMode(co2Led4, OUTPUT);
 
   // Ensures that we are starting with empty running averages
