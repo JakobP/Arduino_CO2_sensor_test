@@ -55,6 +55,19 @@ void setup() {
   pinMode(humidityLed9, OUTPUT);
   pinMode(humidityLed10, OUTPUT);
   pinMode(humidityLed11, OUTPUT);
+
+  // Power all leds for 5 seconds, so we can see that they work
+  digitalWrite(co2Led3, HIGH);
+  digitalWrite(co2Led4, HIGH);
+  digitalWrite(co2Led5, HIGH);
+  digitalWrite(temperatureLed6, HIGH);
+  digitalWrite(temperatureLed7, HIGH);
+  digitalWrite(temperatureLed8, HIGH);
+  digitalWrite(humidityLed9, HIGH);
+  digitalWrite(humidityLed10, HIGH);
+  digitalWrite(humidityLed11, HIGH);
+
+  delay(5000);
   
   // Ensures that we are starting with empty running averages
   averageCo2.clear();
@@ -63,7 +76,6 @@ void setup() {
 }
 
 void loop() {
-
   // Get the values
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
@@ -112,6 +124,17 @@ void loop() {
     Serial.print("RESET Running Averages");
   }
 
+/*
+  digitalWrite(co2Led3, HIGH);
+  digitalWrite(co2Led4, HIGH);
+  digitalWrite(co2Led5, HIGH);
+  digitalWrite(temperatureLed6, HIGH);
+  digitalWrite(temperatureLed7, HIGH);
+  digitalWrite(temperatureLed8, HIGH);
+  digitalWrite(humidityLed9, HIGH);
+  digitalWrite(humidityLed10, HIGH);
+  digitalWrite(humidityLed11, HIGH);
+*/
   updateLedsCo2(averageCo2Float);
   updateLedsTemperature(averageTemperatureFloat);
   updateLedsHumidity(averageHumidityFloat);
