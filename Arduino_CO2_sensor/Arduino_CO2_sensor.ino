@@ -19,12 +19,14 @@ DHT dht(DHTPIN, DHTTYPE); // Initialize sensor
 
 //MQ135.h config
 MQ135 gasSensor = MQ135(0);
-//float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and change it IN THE MQ135.h LIBRARY. Each sensor is different and this makes the PPM calculation work.
+float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and change it IN THE MQ135.h LIBRARY. Each sensor is different and this makes the PPM calculation work.
+
 
 //RunningAverage.h variables
-RunningAverage averageCo2(300);
-RunningAverage averageTemperature(300);
-RunningAverage averageHumidity(300);
+int averageSamples = 10;
+RunningAverage averageCo2(averageSamples);
+RunningAverage averageTemperature(averageSamples);
+RunningAverage averageHumidity(averageSamples);
 int samples = 0;
 
 //LED config
@@ -48,7 +50,7 @@ void setup() {
 }
 
 void loop() {
-  digitalWrite(3, HIGH);
+
   // Get the values
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
@@ -87,7 +89,7 @@ void loop() {
   
   
   //Reset runningAverage to 0 after 300 readings
-  if (samples == 300)
+  if (samples == averageSamples)
   {
     samples = 0;
     averageCo2.clear();
