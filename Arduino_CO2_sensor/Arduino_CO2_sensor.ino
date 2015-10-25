@@ -135,7 +135,7 @@ float getTemperature(){
 }
 
 void updateLedsCo2(float value){
-  Serial.println("Updating CO2 Leds"); 
+  //Serial.println("Updating CO2 Leds"); 
   if(value<1500){
     Serial.println("CO2 below 1000");
     digitalWrite(co2Led3, HIGH);
@@ -157,22 +157,22 @@ void updateLedsCo2(float value){
 }
 
 void updateLedsTemperature(float value){
-  Serial.println("Updating Temperature Leds"); 
-  if(value<24){
-    Serial.println("Temperature below 24");
+  //Serial.println("Updating Temperature Leds"); 
+  if(value<21){
+    Serial.println("Temperature below 21");
     digitalWrite(temperatureLed6, HIGH);
     digitalWrite(temperatureLed7, LOW);
     digitalWrite(temperatureLed8, LOW);
   }
-  if(value>=24 && value<25){
+  if(value>=21 && value<22){
     Serial.println("Temperature between 24 and 25");
     digitalWrite(temperatureLed6, LOW);
     digitalWrite(temperatureLed7, HIGH);
     digitalWrite(temperatureLed8, LOW);
   }
 
-  if(value>=25){
-    Serial.println("Temperature above 25");
+  if(value>=22){
+    Serial.println("Temperature above 22");
     digitalWrite(temperatureLed6, LOW);
     digitalWrite(temperatureLed7, LOW);
     digitalWrite(temperatureLed8, HIGH);
@@ -180,7 +180,7 @@ void updateLedsTemperature(float value){
 }
 
 void updateLedsHumidity(float value){
-  Serial.println("Updating Humidity Leds"); 
+  //Serial.println("Updating Humidity Leds"); 
   if(value>40 && value<60){
     Serial.println("Humidity between 40-60");
     digitalWrite(humidityLed9, HIGH);
