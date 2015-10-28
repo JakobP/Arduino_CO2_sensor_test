@@ -68,6 +68,7 @@ void setup() {
   digitalWrite(humidityLed11, HIGH);
 
   delay(5000);
+
   
   // Ensures that we are starting with empty running averages
   averageCo2.clear();
