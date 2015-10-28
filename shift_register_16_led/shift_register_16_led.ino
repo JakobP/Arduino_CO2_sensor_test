@@ -44,7 +44,7 @@ void setup() {
 
   //Arduino doesn't seem to have a way to write binary straight into the code 
   //so these values are in HEX.  Decimal would have been fine, too. 
-  dataArrayGREEN[0] = 0x40; //11111111
+  dataArrayGREEN[0] = 0xFF; //11111111
   dataArrayGREEN[1] = 0x40; //01000000
   dataArrayGREEN[2] = 0x3F; //00111111
   dataArrayGREEN[3] = 0x1F; //00011111
