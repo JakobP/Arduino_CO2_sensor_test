@@ -30,9 +30,25 @@ RunningAverage averageHumidity(averageSamples);
 int samples = 0;
 
 
+// SHIFT REGISTER config
+//Pin connected to ST_CP of 74HC595
+int latchPin = 8;
+//Pin connected to SH_CP of 74HC595
+int clockPin = 12;
+////Pin connected to DS of 74HC595
+int dataPin = 11;
+
+//holders for infromation you're going to pass to shifting function
+byte dataOne;
+byte dataTwo;
+byte dataArrayOne[10];
+byte dataArrayTwo[10];
+
 
 void setup() {
-  Serial.begin(9600);   // sets the serial port to 9600
+  pinMode(latchPin, OUTPUT); // FOr shift register. It is used in the loop
+  Serial.begin(9600);
+  
   dht.begin();          // Not sure what this does. Some sort of initialization of the DHT22 temperature/humidity sensor
   
   //Ensures that we are starting with empty running averages
@@ -40,10 +56,18 @@ void setup() {
   averageTemperature.clear();
   averageHumidity.clear();
 
+  //function that blinks all the LEDs
+  //gets passed the number of blinks and the pause time
+  blinkAll_2Bytes(1,500);
+  
   delay(5000);
 }
 
 void loop() {
+
+  Serial.print("rzero");
+  Serial.println(gasSensor.getRZero());
+  
   // Get the sensor readings
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
@@ -83,9 +107,17 @@ void loop() {
     Serial.print("RESET Running Averages");
   }
 
-  Serial.print(updateLedsCo2(averageCo2Float));
-  Serial.print(updateLedsTemperature(averageTemperatureFloat));
-  Serial.print(updateLedsHumidity(averageHumidityFloat));
+  // Setting LEDs for shift register
+  String temperatureBinaryString  = getLedsTemperature(averageTemperatureFloat);
+  String humidityBinaryString     = getLedsHumidity(averageHumidityFloat);
+  String co2BinaryString          = getLedsCo2(averageCo2Float);
+  String paddingBinaryString      = "0000000"; // This is the wires that can be connected to extra leds.
+  
+  String combinedBinaryStringSixteen  = temperatureBinaryString + humidityBinaryString + co2BinaryString + paddingBinaryString;
+  
+  updateShiftRegisterLeds(combinedBinaryStringSixteen);
+
+
   
   delay(2000);
 }

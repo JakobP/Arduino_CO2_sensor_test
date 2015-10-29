@@ -200,6 +200,10 @@ int binaryStringToInt(String binaryString)
   //return final;
 }
 
+
+/**
+ * @Return reversed string
+ */
 String reverseString(String inputString)
 {
   String output = "";

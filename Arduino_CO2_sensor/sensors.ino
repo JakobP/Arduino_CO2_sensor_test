@@ -29,57 +29,67 @@ float getTemperature(){
 /**
  * @return String (binary) with code for CO2 leds
  */
-String updateLedsCo2(float value){
-  //Serial.println("Updating CO2 Leds"); 
+String getLedsCo2(float value){
+  String ledCode = "";
   if(value<1500){
-    Serial.println("CO2 below 1000");
-    return "100";
+    ledCode = "100";
+    Serial.println("CO2 below 1500 - ledCode: "+ledCode);
+    return ledCode;
   }
   if(value>=1500 && value<3000){
-    Serial.println("CO2 between 2000 and 3000");
+    ledCode = "010";
+    Serial.println("CO2 between 1500 and 3000 - ledCode: "+ledCode);
     return "010";
   }
   if(value>=3000){
-    Serial.println("CO2 above 3000");
-    return "001";
+    ledCode = "001";
+    Serial.println("CO2 above 3000 - ledCode: "+ledCode);
+    return ledCode;
   }
 }
 
 /**
  * @return String (binary) with code for temperature leds
  */
- String updateLedsTemperature(float value){
-  //Serial.println("Updating Temperature Leds"); 
+ String getLedsTemperature(float value){
+  String ledCode = "";
   if(value<21){
-    Serial.println("Temperature below 21");
-    return "100";
+    ledCode = "100";
+    Serial.println("Temperature below 21 - ledCode: "+ledCode);
+    return ledCode;
   }
   if(value>=21 && value<22){
-    Serial.println("Temperature between 24 and 25");
-    return "010";
+    ledCode = "010";
+    Serial.println("Temperature between 24 and 25 - ledCode: "+ledCode);
+    return ledCode;
   }
 
   if(value>=22){
-    Serial.println("Temperature above 22");
-    return "001";
+    ledCode = "001";
+    Serial.println("Temperature above 22 - ledCode: "+ledCode);
+    return ledCode;
   }
 }
 
 /**
  * @return String (binary) with code for humidity leds
  */
-String updateLedsHumidity(float value){
-  //Serial.println("Updating Humidity Leds"); 
+String getLedsHumidity(float value){
+  String ledCode = "";
+
   if(value>40 && value<60){
-    Serial.println("Humidity between 40-60");
-    return "100";
+    ledCode = "100";
+    Serial.println("Humidity between 40-60 - ledCode: " +ledCode);
+    return ledCode;
   }
   if((value>30 && value<40) || (value>60 && value<70)){
-    Serial.println("Humidity btween 30-40 OR  60-70");
+    ledCode = "010";
+    Serial.println("Humidity btween 30-40 OR  60-70 - ledCode: " + ledCode);
     return "010";
   }
   if(value<30 || value>70){
-    Serial.println("Humidity below 30 OR above 70");
-    return "001";
+    ledCode = "001";
+    Serial.println("Humidity below 30 OR above 70 - LED: " + ledCode);
+    return ledCode;
   }
 }
