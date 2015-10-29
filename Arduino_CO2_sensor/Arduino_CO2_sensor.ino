@@ -29,43 +29,11 @@ RunningAverage averageTemperature(averageSamples);
 RunningAverage averageHumidity(averageSamples);
 int samples = 0;
 
-//LED config
-int co2Led3 = 3; // green
-int co2Led4 = 4; // yellow
-int co2Led5 = 5; // red
-int temperatureLed6 = 6; // green
-int temperatureLed7 = 7; // yellow
-int temperatureLed8 = 8; // red
-int humidityLed9 = 9; // green
-int humidityLed10 = 10; // yellow
-int humidityLed11 = 11; // red
 
 
 void setup() {
   Serial.begin(9600);      // sets the serial port to 9600
   dht.begin(); // Not sure what this does
-
-  // Setup of LEDs
-  pinMode(co2Led3, OUTPUT);
-  pinMode(co2Led4, OUTPUT);
-  pinMode(co2Led5, OUTPUT);
-  pinMode(temperatureLed6, OUTPUT);
-  pinMode(temperatureLed7, OUTPUT);
-  pinMode(temperatureLed8, OUTPUT);
-  pinMode(humidityLed9, OUTPUT);
-  pinMode(humidityLed10, OUTPUT);
-  pinMode(humidityLed11, OUTPUT);
-
-  // Power all leds for 5 seconds, so we can see that they work
-  digitalWrite(co2Led3, HIGH);
-  digitalWrite(co2Led4, HIGH);
-  digitalWrite(co2Led5, HIGH);
-  digitalWrite(temperatureLed6, HIGH);
-  digitalWrite(temperatureLed7, HIGH);
-  digitalWrite(temperatureLed8, HIGH);
-  digitalWrite(humidityLed9, HIGH);
-  digitalWrite(humidityLed10, HIGH);
-  digitalWrite(humidityLed11, HIGH);
 
   delay(5000);
 
@@ -82,16 +50,7 @@ void loop() {
   float temperature = getTemperature(); // Degrees Celcius
   float humidity = getHumidity();       // Percentage
 
-/*
-  Serial.print("CO2 PPM:\t");
-  Serial.print(co2);
-  Serial.print("\t");
-  Serial.print("Temperature:\t\t");
-  Serial.print(temperature);
-  Serial.print("\t");
-  Serial.print("Humidity:\t");
-  Serial.println(humidity);
-*/
+
   //Add the values to running averages
   averageCo2.addValue(co2);
   averageTemperature.addValue(temperature);
@@ -125,20 +84,9 @@ void loop() {
     Serial.print("RESET Running Averages");
   }
 
-/*
-  digitalWrite(co2Led3, HIGH);
-  digitalWrite(co2Led4, HIGH);
-  digitalWrite(co2Led5, HIGH);
-  digitalWrite(temperatureLed6, HIGH);
-  digitalWrite(temperatureLed7, HIGH);
-  digitalWrite(temperatureLed8, HIGH);
-  digitalWrite(humidityLed9, HIGH);
-  digitalWrite(humidityLed10, HIGH);
-  digitalWrite(humidityLed11, HIGH);
-*/
-  updateLedsCo2(averageCo2Float);
-  updateLedsTemperature(averageTemperatureFloat);
-  updateLedsHumidity(averageHumidityFloat);
+  Serial.print(updateLedsCo2(averageCo2Float));
+  Serial.print(updateLedsTemperature(averageTemperatureFloat));
+  Serial.print(updateLedsHumidity(averageHumidityFloat));
   
   delay(2000);
 }
@@ -158,70 +106,52 @@ float getTemperature(){
   return temperature;
 }
 
-void updateLedsCo2(float value){
+String updateLedsCo2(float value){
   //Serial.println("Updating CO2 Leds"); 
   if(value<1500){
     Serial.println("CO2 below 1000");
-    digitalWrite(co2Led3, HIGH);
-    digitalWrite(co2Led4, LOW);
-    digitalWrite(co2Led5, LOW);
+    return "100";
   }
   if(value>=1500 && value<3000){
     Serial.println("CO2 between 2000 and 3000");
-    digitalWrite(co2Led3, LOW);
-    digitalWrite(co2Led4, HIGH);
-    digitalWrite(co2Led5, LOW);
+    return "010";
   }
   if(value>=3000){
     Serial.println("CO2 above 3000");
-    digitalWrite(co2Led3, LOW);
-    digitalWrite(co2Led4, LOW);
-    digitalWrite(co2Led5, HIGH);
+    return "001";
   }
 }
 
-void updateLedsTemperature(float value){
+String updateLedsTemperature(float value){
   //Serial.println("Updating Temperature Leds"); 
   if(value<21){
     Serial.println("Temperature below 21");
-    digitalWrite(temperatureLed6, HIGH);
-    digitalWrite(temperatureLed7, LOW);
-    digitalWrite(temperatureLed8, LOW);
+    return "100";
   }
   if(value>=21 && value<22){
     Serial.println("Temperature between 24 and 25");
-    digitalWrite(temperatureLed6, LOW);
-    digitalWrite(temperatureLed7, HIGH);
-    digitalWrite(temperatureLed8, LOW);
+    return "010";
   }
 
   if(value>=22){
     Serial.println("Temperature above 22");
-    digitalWrite(temperatureLed6, LOW);
-    digitalWrite(temperatureLed7, LOW);
-    digitalWrite(temperatureLed8, HIGH);
+    return "001";
   }
 }
 
-void updateLedsHumidity(float value){
+String updateLedsHumidity(float value){
   //Serial.println("Updating Humidity Leds"); 
   if(value>40 && value<60){
     Serial.println("Humidity between 40-60");
-    digitalWrite(humidityLed9, HIGH);
-    digitalWrite(humidityLed10, LOW);
-    digitalWrite(humidityLed11, LOW);
+    return "100";
   }
   if((value>30 && value<40) || (value>60 && value<70)){
     Serial.println("Humidity btween 30-40 OR  60-70");
-    digitalWrite(humidityLed9, LOW);
-    digitalWrite(humidityLed10, HIGH);
-    digitalWrite(humidityLed11, LOW);
+    return "010";
   }
   if(value<30 || value>70){
     Serial.println("Humidity below 30 OR above 70");
-    digitalWrite(humidityLed9, LOW);
-    digitalWrite(humidityLed10, LOW);
-    digitalWrite(humidityLed11, HIGH);
+    return "001";
   }
 }
 
