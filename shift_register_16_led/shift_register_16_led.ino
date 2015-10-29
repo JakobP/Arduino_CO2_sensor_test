@@ -24,6 +24,14 @@ byte dataGREEN;
 byte dataArrayRED[10];
 byte dataArrayGREEN[10];
 
+
+String humidityBinaryString     = "111";
+String temperatureBinaryString  = "111";
+String co2BinaryString          = "111";
+String paddingBinaryString      = "0000000";
+
+String combinedBinaryStringSixteen  = humidityBinaryString + temperatureBinaryString + co2BinaryString + paddingBinaryString;
+
 void setup() {
   //set pins to output because they are addressed in the main loop
   pinMode(latchPin, OUTPUT);
@@ -65,6 +73,16 @@ void setup() {
 
 void loop() {
 
+  Serial.println(combinedBinaryStringSixteen);
+  String hexBinaryString1 = combinedBinaryStringSixteen.substring(0,8);
+  Serial.println(hexBinaryString1);
+
+  String hexBinaryString2 = combinedBinaryStringSixteen.substring(8,16);
+  Serial.println(hexBinaryString2);
+  
+  String hex1 = binaryStringToHex("1111111");
+  Serial.print("yoyoyoy");
+  Serial.println(hex1);
 
   //for (int j = 0; j < 1; j++) {
     //load the light sequence you want from array
@@ -154,4 +172,29 @@ void blinkAll_2Bytes(int n, int d) {
     digitalWrite(latchPin, 1);
     delay(d);
   }
+}
+
+// Converts a binary string to HEX
+String binaryStringToHex(String binaryString)
+{
+  char s[] = "11111111";
+  int value = 0;
+  for (int i=0; i< strlen(s); i++)  // for every character in the string  strlen(s) returns the length of a char array
+  {
+    value *= 2; // double the result so far
+    if (s[i] == '1') value++;  //add 1 if needed
+  }
+  
+  // using an int and a base (hexadecimal):
+  String stringOne =  String(value, HEX);   
+  Serial.println("INT");
+  Serial.println(value);
+  
+  // prints "2d", which is the hexadecimal version of decimal 45:
+  Serial.println("HEX");
+  Serial.println(stringOne);
+  
+  String final = "0x" + stringOne;
+  Serial.println(final);
+  return final;
 }
