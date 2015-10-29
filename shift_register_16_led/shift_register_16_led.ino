@@ -24,13 +24,12 @@ byte dataGREEN;
 byte dataArrayRED[10];
 byte dataArrayGREEN[10];
 
-
-String humidityBinaryString     = "111";
 String temperatureBinaryString  = "111";
-String co2BinaryString          = "111";
+String humidityBinaryString     = "000";
+String co2BinaryString          = "000";
 String paddingBinaryString      = "0000000";
 
-String combinedBinaryStringSixteen  = humidityBinaryString + temperatureBinaryString + co2BinaryString + paddingBinaryString;
+String combinedBinaryStringSixteen  = temperatureBinaryString + humidityBinaryString + co2BinaryString + paddingBinaryString;
 
 void setup() {
   //set pins to output because they are addressed in the main loop
@@ -39,32 +38,13 @@ void setup() {
 
   //Arduino doesn't seem to have a way to write binary straight into the code 
   //so these values are in HEX.  Decimal would have been fine, too. 
-  dataArrayRED[0] = 0xFF; //11111111
-  dataArrayRED[1] = 0xFE; //11111110
-  dataArrayRED[2] = 0xFC; //11111100
-  dataArrayRED[3] = 0xF8; //11111000
-  dataArrayRED[4] = 0xF0; //11110000
-  dataArrayRED[5] = 0xE0; //11100000
-  dataArrayRED[6] = 0xC0; //11000000
-  dataArrayRED[7] = 0x80; //10000000
-  dataArrayRED[8] = 0x00; //00000000
-  dataArrayRED[9] = 0xE0; //11100000
-
+  //dataArrayRED[0] = 0xFF; //11111111
+  //Serial.print("dataArrayRED");
+  //Serial.println(dataArrayRED[0]);
+  
   //Arduino doesn't seem to have a way to write binary straight into the code 
   //so these values are in HEX.  Decimal would have been fine, too. 
-  dataArrayGREEN[0] = 0xFF; //11111111
-  dataArrayGREEN[1] = 0x40; //01000000
-  dataArrayGREEN[2] = 0x3F; //00111111
-  dataArrayGREEN[3] = 0x1F; //00011111
-  dataArrayGREEN[4] = 0x0F; //00001111
-  dataArrayGREEN[5] = 0x07; //00000111
-  dataArrayGREEN[6] = 0x03; //00000011
-  dataArrayGREEN[7] = 0x01; //00000001
-  dataArrayGREEN[8] = 0x00; //00000000
-  dataArrayGREEN[9] = 0x07; //00000111
-
-
-  
+  dataArrayGREEN[0] = 0x00; //11111111 - 00000000
 
   //function that blinks all the LEDs
   //gets passed the number of blinks and the pause time
@@ -72,17 +52,35 @@ void setup() {
 }
 
 void loop() {
+  // 16 character binary string
+  Serial.println("combinedBinaryStringSixteen: "+combinedBinaryStringSixteen);
 
-  Serial.println(combinedBinaryStringSixteen);
-  String hexBinaryString1 = combinedBinaryStringSixteen.substring(0,8);
-  Serial.println(hexBinaryString1);
+  // 8 character binary string
+  String shiftRegisterOneString = combinedBinaryStringSixteen.substring(0,8);
+  Serial.println("shiftRegisterOneString: " +shiftRegisterOneString);
 
-  String hexBinaryString2 = combinedBinaryStringSixteen.substring(8,16);
-  Serial.println(hexBinaryString2);
+  // HEX of 8 characters
+  //String hexBinaryString1Hex = binaryStringToHex(hexBinaryString1);
+  //Serial.println("hexBinaryString1Hex: " + hexBinaryString1Hex);
+
+
+
+  // Convert HEX to binary
+  //byte hex1Bytes[hexBinaryString1.length()+1];
   
-  String hex1 = binaryStringToHex("1111111");
-  Serial.print("yoyoyoy");
-  Serial.println(hex1);
+  //hexBinaryString1Hex.getBytes(dataArrayRED, hexBinaryString1Hex.length()+1);
+  dataArrayRED[0] = binaryStringToInt(shiftRegisterOneString);
+  //dataArrayRED[0] = 255;
+  Serial.print("DataarrayRED: ");
+  Serial.println(dataArrayRED[0]);
+
+
+
+   
+  
+  //String hexBinaryString2 = combinedBinaryStringSixteen.substring(8,16);
+  //Serial.println("hexBinaryString2);
+  //hexBinaryString2.getBytes(dataArrayGREEN, hexBinaryString1.length()+1);
 
   //for (int j = 0; j < 1; j++) {
     //load the light sequence you want from array
@@ -96,7 +94,7 @@ void loop() {
     //return the latch pin high to signal chip that it 
     //no longer needs to listen for information
     digitalWrite(latchPin, 1);
-    delay(300);
+    delay(1000);
  // }
 }
 
@@ -175,9 +173,12 @@ void blinkAll_2Bytes(int n, int d) {
 }
 
 // Converts a binary string to HEX
-String binaryStringToHex(String binaryString)
+// See http://stackoverflow.com/questions/5702931/convert-integer-decimal-to-hex-on-an-arduino
+int binaryStringToInt(String binaryString)
 {
-  char s[] = "11111111";
+  char s[50];
+  binaryString.toCharArray(s, 50) ;
+
   int value = 0;
   for (int i=0; i< strlen(s); i++)  // for every character in the string  strlen(s) returns the length of a char array
   {
@@ -187,14 +188,14 @@ String binaryStringToHex(String binaryString)
   
   // using an int and a base (hexadecimal):
   String stringOne =  String(value, HEX);   
-  Serial.println("INT");
+  Serial.print("INT: ");
   Serial.println(value);
-  
-  // prints "2d", which is the hexadecimal version of decimal 45:
-  Serial.println("HEX");
-  Serial.println(stringOne);
-  
-  String final = "0x" + stringOne;
-  Serial.println(final);
-  return final;
+
+  return value;
+
+  //CODE FOR INT->HEX
+  //Serial.println("HEX: "+ stringOne);
+  //String final = "0x" + stringOne;
+  //Serial.println("final HEX: "+final);
+  //return final;
 }
