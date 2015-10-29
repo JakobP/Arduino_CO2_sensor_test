@@ -23,7 +23,7 @@ float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and c
 
 
 //RunningAverage.h variables
-int averageSamples = 10;
+int averageSamples = 10;  // Set the number of samples to be used for running averages
 RunningAverage averageCo2(averageSamples);
 RunningAverage averageTemperature(averageSamples);
 RunningAverage averageHumidity(averageSamples);
@@ -32,35 +32,34 @@ int samples = 0;
 
 
 void setup() {
-  Serial.begin(9600);      // sets the serial port to 9600
-  dht.begin(); // Not sure what this does
-
-  delay(5000);
-
+  Serial.begin(9600);   // sets the serial port to 9600
+  dht.begin();          // Not sure what this does. Some sort of initialization of the DHT22 temperature/humidity sensor
   
-  // Ensures that we are starting with empty running averages
+  //Ensures that we are starting with empty running averages
   averageCo2.clear();
   averageTemperature.clear();
   averageHumidity.clear();
+
+  delay(5000);
 }
 
 void loop() {
-  // Get the values
+  // Get the sensor readings
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
   float humidity = getHumidity();       // Percentage
 
-
-  //Add the values to running averages
+  //Add the sensorvalues to running averages
   averageCo2.addValue(co2);
   averageTemperature.addValue(temperature);
   averageHumidity.addValue(humidity);
 
+  //Get running average of the sensor data
   float averageCo2Float = averageCo2.getAverage();
   float averageTemperatureFloat = averageTemperature.getAverage();
   float averageHumidityFloat = averageHumidity.getAverage();
 
-
+  // Print the current calues
   Serial.print("Avg. CO2:\t");
   Serial.print(averageCo2Float);
   Serial.print("\t");
@@ -70,7 +69,7 @@ void loop() {
   Serial.print("Avg. humidity:\t");
   Serial.println(averageHumidityFloat);
 
-  // Increase the sample count
+  // Increase the running average sample count
   samples++;
 
     
@@ -89,70 +88,6 @@ void loop() {
   Serial.print(updateLedsHumidity(averageHumidityFloat));
   
   delay(2000);
-}
-
-float getCo2(){
-  float ppm = gasSensor.getPPM();
-  return ppm;
-}
-
-float getHumidity(){
-  float humidity = dht.readHumidity();
-  return humidity;
-}
-
-float getTemperature(){
-  float temperature = dht.readTemperature();
-  return temperature;
-}
-
-String updateLedsCo2(float value){
-  //Serial.println("Updating CO2 Leds"); 
-  if(value<1500){
-    Serial.println("CO2 below 1000");
-    return "100";
-  }
-  if(value>=1500 && value<3000){
-    Serial.println("CO2 between 2000 and 3000");
-    return "010";
-  }
-  if(value>=3000){
-    Serial.println("CO2 above 3000");
-    return "001";
-  }
-}
-
-String updateLedsTemperature(float value){
-  //Serial.println("Updating Temperature Leds"); 
-  if(value<21){
-    Serial.println("Temperature below 21");
-    return "100";
-  }
-  if(value>=21 && value<22){
-    Serial.println("Temperature between 24 and 25");
-    return "010";
-  }
-
-  if(value>=22){
-    Serial.println("Temperature above 22");
-    return "001";
-  }
-}
-
-String updateLedsHumidity(float value){
-  //Serial.println("Updating Humidity Leds"); 
-  if(value>40 && value<60){
-    Serial.println("Humidity between 40-60");
-    return "100";
-  }
-  if((value>30 && value<40) || (value>60 && value<70)){
-    Serial.println("Humidity btween 30-40 OR  60-70");
-    return "010";
-  }
-  if(value<30 || value>70){
-    Serial.println("Humidity below 30 OR above 70");
-    return "001";
-  }
 }
 
 
