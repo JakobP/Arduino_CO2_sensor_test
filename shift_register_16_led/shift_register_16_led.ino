@@ -24,9 +24,9 @@ byte dataGREEN;
 byte dataArrayRED[10];
 byte dataArrayGREEN[10];
 
-String temperatureBinaryString  = "111";
+String temperatureBinaryString  = "000";
 String humidityBinaryString     = "000";
-String co2BinaryString          = "000";
+String co2BinaryString          = "001";
 String paddingBinaryString      = "0000000";
 
 String combinedBinaryStringSixteen  = temperatureBinaryString + humidityBinaryString + co2BinaryString + paddingBinaryString;
@@ -44,11 +44,11 @@ void setup() {
   
   //Arduino doesn't seem to have a way to write binary straight into the code 
   //so these values are in HEX.  Decimal would have been fine, too. 
-  dataArrayGREEN[0] = 0x00; //11111111 - 00000000
+  //dataArrayGREEN[0] = 0x00; //11111111 - 00000000
 
   //function that blinks all the LEDs
   //gets passed the number of blinks and the pause time
-  blinkAll_2Bytes(2,500); 
+  blinkAll_2Bytes(1,500); 
 }
 
 void loop() {
@@ -57,31 +57,31 @@ void loop() {
 
   // 8 character binary string
   String shiftRegisterOneString = combinedBinaryStringSixteen.substring(0,8);
+  String shiftRegisterTwoString = combinedBinaryStringSixteen.substring(8,16);
   Serial.println("shiftRegisterOneString: " +shiftRegisterOneString);
+  Serial.println("shiftRegisterTWOString: " +shiftRegisterTwoString);
 
-  // HEX of 8 characters
-  //String hexBinaryString1Hex = binaryStringToHex(hexBinaryString1);
-  //Serial.println("hexBinaryString1Hex: " + hexBinaryString1Hex);
-
-
-
-  // Convert HEX to binary
-  //byte hex1Bytes[hexBinaryString1.length()+1];
+  //Reverse strings. This is to make them in the right order for the shiftout() function (I think) - this seems a bit weird...
+  shiftRegisterOneString = reverseString(shiftRegisterOneString);
+  shiftRegisterTwoString = reverseString(shiftRegisterTwoString);
+  Serial.println("Reversed shiftRegisterOneString: "+ shiftRegisterOneString);
+  Serial.println("Reversed shiftRegisterTwoString: "+ shiftRegisterTwoString);
   
-  //hexBinaryString1Hex.getBytes(dataArrayRED, hexBinaryString1Hex.length()+1);
-  dataArrayRED[0] = binaryStringToInt(shiftRegisterOneString);
-  //dataArrayRED[0] = 255;
+  
+  // Convert binary strings to integer
+  int ShiftRegisterOneInt = binaryStringToInt(shiftRegisterOneString);
+  int ShiftRegisterTwoInt = binaryStringToInt(shiftRegisterTwoString);
+
+  dataArrayRED[0] = ShiftRegisterOneInt;
   Serial.print("DataarrayRED: ");
   Serial.println(dataArrayRED[0]);
-
-
-
-   
   
-  //String hexBinaryString2 = combinedBinaryStringSixteen.substring(8,16);
-  //Serial.println("hexBinaryString2);
-  //hexBinaryString2.getBytes(dataArrayGREEN, hexBinaryString1.length()+1);
+  dataArrayGREEN[0] = ShiftRegisterTwoInt;
+  Serial.print("DataarrayGREEN: ");
+  Serial.println(dataArrayGREEN[0]);
 
+
+  
   //for (int j = 0; j < 1; j++) {
     //load the light sequence you want from array
     dataRED = dataArrayRED[0];
@@ -198,4 +198,20 @@ int binaryStringToInt(String binaryString)
   //String final = "0x" + stringOne;
   //Serial.println("final HEX: "+final);
   //return final;
+}
+
+String reverseString(String inputString)
+{
+  String output = "";
+  
+  //Using substring to reverse the string.
+  for( int i = 0; i< inputString.length(); i++)
+  {
+    String currentValue = inputString.substring(inputString.length()-(i+1),inputString.length()-i);
+    Serial.println("Number is: "+currentValue);
+    output = output + currentValue;
+    Serial.println("current output:"+output);
+  }
+  
+  return output;
 }
