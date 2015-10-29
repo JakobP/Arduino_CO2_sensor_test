@@ -32,11 +32,11 @@ int samples = 0;
 
 // SHIFT REGISTER config
 //Pin connected to ST_CP of 74HC595
-int latchPin = 8;
+int latchPin = 3;
 //Pin connected to SH_CP of 74HC595
-int clockPin = 12;
+int clockPin = 5;
 ////Pin connected to DS of 74HC595
-int dataPin = 11;
+int dataPin = 4;
 
 //holders for infromation you're going to pass to shifting function
 byte dataOne;
@@ -65,7 +65,8 @@ void setup() {
 
 void loop() {
 
-  Serial.print("rzero");
+  // Show the rzero - this is important for configuration of the MQ135 library
+  Serial.print("rzero: ");
   Serial.println(gasSensor.getRZero());
   
   // Get the sensor readings
