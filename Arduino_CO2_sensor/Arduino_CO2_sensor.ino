@@ -7,9 +7,9 @@
 
 // CALIBRATION
 // When running, you should wait 30-60 minutes until the value has settled, then get the RZero using gasSensor.getRZero() and define it.
+#include<stdlib.h> // Converting floats to string
 
 #include <MQ135.h>
-#include <RunningAverage.h>
 #include "DHT.h"
 
 //DHT22 config
@@ -23,11 +23,21 @@ float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and c
 
 
 //RunningAverage.h variables
+#include <RunningAverage.h>
+
 int averageSamples = 10;  // Set the number of samples to be used for running averages
 RunningAverage averageCo2(averageSamples);
 RunningAverage averageTemperature(averageSamples);
 RunningAverage averageHumidity(averageSamples);
 int samples = 0;
+
+
+// SD CARD config
+#include <SD.h> //Load SD card library
+#include<SPI.h> //Load SPI Library
+
+int chipSelect = 10; //chipSelect pin for the SD card Reader
+File logWriter; //Data object for logging
 
 
 // SHIFT REGISTER config
@@ -59,6 +69,10 @@ void setup() {
   //function that blinks all the LEDs
   //gets passed the number of blinks and the pause time
   blinkAll_2Bytes(1,500);
+
+  // Begin writing to SD card
+  SD.begin(10); //Initialize the SD card reader
+  writeToLog("*** STARTING NEW LOG ***");
   
   delay(5000);
 }
@@ -94,6 +108,18 @@ void loop() {
   Serial.print("Avg. humidity:\t");
   Serial.println(averageHumidityFloat);
 
+
+  char buff[10]; // Buffer for converting float to string for the 
+  String co2Test = dtostrf(averageCo2Float, 1, 2, buff);  //1 is mininum width, 2 is characters after decimal point
+  String humidityTest = dtostrf(averageCo2Float, 1, 2, buff);
+  String temperatureTest = dtostrf(averageCo2Float, 1, 2, buff);
+  // Write data to log
+  writeToLog("Avg. CO2: "+ co2Test);
+  writeToLog("\t");
+  writeToLog("Avg. temperature: "+ humidityTest);
+  writeToLog("\t");
+  writeToLog("Avg. humidity: "+ temperatureTest);
+
   // Increase the running average sample count
   samples++;
 
@@ -115,12 +141,9 @@ void loop() {
   String paddingBinaryString      = "0000000"; // This is the wires that can be connected to extra leds.
   
   String combinedBinaryStringSixteen  = temperatureBinaryString + humidityBinaryString + co2BinaryString + paddingBinaryString;
-  
+
+  // Send the data for lighting the connect leds to the shift register
   updateShiftRegisterLeds(combinedBinaryStringSixteen);
-
-
   
   delay(2000);
 }
-
-
