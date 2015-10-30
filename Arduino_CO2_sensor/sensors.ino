@@ -58,15 +58,15 @@ String getLedsCo2(float value){
     Serial.println("Temperature below 21 - ledCode: "+ledCode);
     return ledCode;
   }
-  if(value>=21 && value<22){
+  if(value>=21 && value<23){
     ledCode = "010";
-    Serial.println("Temperature between 24 and 25 - ledCode: "+ledCode);
+    Serial.println("Temperature between 21 and 23 - ledCode: "+ledCode);
     return ledCode;
   }
 
-  if(value>=22){
+  if(value>=23){
     ledCode = "001";
-    Serial.println("Temperature above 22 - ledCode: "+ledCode);
+    Serial.println("Temperature above 223 - ledCode: "+ledCode);
     return ledCode;
   }
 }
