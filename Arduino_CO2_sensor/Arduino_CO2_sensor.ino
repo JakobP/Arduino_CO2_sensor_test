@@ -23,7 +23,7 @@ float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and c
 
 
 //RunningAverage.h variables
-int averageSamples = 10;  // Set the number of samples to be used for running averages
+int averageSamples = 3;  // Set the number of samples to be used for running averages
 RunningAverage averageCo2(averageSamples);
 RunningAverage averageTemperature(averageSamples);
 RunningAverage averageHumidity(averageSamples);
@@ -74,6 +74,16 @@ void loop() {
   float temperature = getTemperature(); // Degrees Celcius
   float humidity = getHumidity();       // Percentage
 
+  // Print the current calues
+  Serial.print("CO2:\t");
+  Serial.print(co2);
+  Serial.print("\t");
+  Serial.print("Hemperature:\t");
+  Serial.print(temperature);
+  Serial.print("\t");
+  Serial.print("Humidity:\t");
+  Serial.println(humidity);
+
   //Add the sensorvalues to running averages
   averageCo2.addValue(co2);
   averageTemperature.addValue(temperature);
@@ -98,14 +108,14 @@ void loop() {
   samples++;
 
     
-  //Reset runningAverage to 0 after 300 readings
-  if (samples == averageSamples)
+  //Reset runningAverage
+  if (samples >= averageSamples)
   {
     samples = 0;
     averageCo2.clear();
     averageTemperature.clear();
     averageHumidity.clear();
-    Serial.print("RESET Running Averages");
+    Serial.println("RESET Running Averages");
   }
 
   // Setting LEDs for shift register

@@ -31,19 +31,19 @@ float getTemperature(){
  */
 String getLedsCo2(float value){
   String ledCode = "";
-  if(value<1500){
+  if(value<1000){
     ledCode = "100";
-    Serial.println("CO2 below 1500 - ledCode: "+ledCode);
+    Serial.println("CO2 below 1000 - ledCode: "+ledCode);
     return ledCode;
   }
-  if(value>=1500 && value<3000){
+  if(value>=1000 && value<2000){
     ledCode = "010";
-    Serial.println("CO2 between 1500 and 3000 - ledCode: "+ledCode);
+    Serial.println("CO2 between 1000 and 2000 - ledCode: "+ledCode);
     return "010";
   }
-  if(value>=3000){
+  if(value>=2000){
     ledCode = "001";
-    Serial.println("CO2 above 3000 - ledCode: "+ledCode);
+    Serial.println("CO2 above 2000 - ledCode: "+ledCode);
     return ledCode;
   }
 }
@@ -58,15 +58,15 @@ String getLedsCo2(float value){
     Serial.println("Temperature below 21 - ledCode: "+ledCode);
     return ledCode;
   }
-  if(value>=21 && value<23){
+  if(value>=21 && value<24){
     ledCode = "010";
-    Serial.println("Temperature between 21 and 23 - ledCode: "+ledCode);
+    Serial.println("Temperature between 21 and 24 - ledCode: "+ledCode);
     return ledCode;
   }
 
-  if(value>=23){
+  if(value>=24){
     ledCode = "001";
-    Serial.println("Temperature above 223 - ledCode: "+ledCode);
+    Serial.println("Temperature above 24 - ledCode: "+ledCode);
     return ledCode;
   }
 }
