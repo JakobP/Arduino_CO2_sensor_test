@@ -118,11 +118,11 @@ void loop() {
 
 
   char buff[10]; // Buffer for converting float to string for the 
-  String co2Test = dtostrf(averageCo2Float, 1, 2, buff);  //1 is mininum width, 2 is characters after decimal point
-  String humidityTest = dtostrf(averageCo2Float, 1, 2, buff);
-  String temperatureTest = dtostrf(averageCo2Float, 1, 2, buff);
+  String avgCo2String = dtostrf(averageCo2Float, 1, 2, buff);  //1 is mininum width, 2 is characters after decimal point
+  String avgHumidityString = dtostrf(averageHumidityFloat, 1, 2, buff);
+  String avgTemperatureString = dtostrf(averageTemperatureFloat, 1, 2, buff);
   // Write data to log
-  writeToLog("Avg. CO2;"+ co2Test + ";" + "Avg. temperature;" + temperatureTest + "Avg. humidity;" + humidityTest);
+  writeToLog("Avg. CO2;"+ avgCo2String + ";" + "Avg. temperature;" + avgTemperatureString + ";" + "Avg. humidity;" + avgHumidityString);
 
   // Increase the running average sample count
   samples++;
