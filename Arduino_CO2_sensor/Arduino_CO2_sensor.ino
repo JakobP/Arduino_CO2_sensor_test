@@ -81,6 +81,7 @@ void setup() {
   pinMode(53,OUTPUT);
   SD.begin(53); //Initialize the SD card reader
   writeToLog("*** STARTING NEW LOG ***");
+  writeToLog("CO2; Temperature; Humidity");
   
   delay(5000);
 }
@@ -122,7 +123,7 @@ void loop() {
   String avgHumidityString = dtostrf(averageHumidityFloat, 1, 2, buff);
   String avgTemperatureString = dtostrf(averageTemperatureFloat, 1, 2, buff);
   // Write data to log
-  writeToLog("Avg. CO2;"+ avgCo2String + ";" + "Avg. temperature;" + avgTemperatureString + ";" + "Avg. humidity;" + avgHumidityString);
+  writeToLog(avgCo2String + ";" + avgTemperatureString + ";" + avgHumidityString);
 
   // Increase the running average sample count
   samples++;

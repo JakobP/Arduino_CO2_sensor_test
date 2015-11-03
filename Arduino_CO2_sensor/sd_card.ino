@@ -6,7 +6,7 @@ void writeToLog(String message)
   logWriter = SD.open("log.csv", FILE_WRITE);
    if (logWriter)
    {
-    int seconds = ((millis() + 500) / 1000);
+     int seconds = (millis() + 500) / 1000;
      delay(250); //Pause between readings.
      logWriter.print(seconds);                           //seconds since program started
      logWriter.print(";");                               //write a commma
