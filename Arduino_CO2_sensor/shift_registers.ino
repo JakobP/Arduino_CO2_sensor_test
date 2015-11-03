@@ -1,15 +1,4 @@
-//**************************************************************//
-//  Name    : shiftOutCode, Predefined Dual Array Style         //
-//  Author  : Carlyn Maw, Tom Igoe                              //
-//  Date    : 25 Oct, 2006                                      //
-//  Version : 1.0                                               //
-//  Notes   : Code for using a 74HC595 Shift Register           //
-//          : to count from 0 to 255                            //
-//****************************************************************
-// From https://www.arduino.cc/en/Tutorial/ShiftOut
-
-// NEXT STEP - Consider turning the 2 arrays into 3. You just do a shiftOut() on each array, so it would be fairly easy. Then you can feed the right numbers into it.
-// You may be able to do a binary string -> integer -> hex conversion to make the code easier to understand. See http://stackoverflow.com/questions/5759999/translating-a-string-containing-a-binary-value-to-hex
+// Using functions from the tutorial at https://www.arduino.cc/en/Tutorial/ShiftOut
 
 // the heart of the program
 void shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
@@ -130,7 +119,8 @@ String reverseString(String inputString)
  */
 void updateShiftRegisterLeds(String binaryString)
 {
-
+  Serial.println("running updateShiftRegisterLeds");
+  Serial.println(binaryString);
   String combinedBinaryStringSixteen = binaryString;
   // SHIFT REGISTER
   // 16 character binary string
@@ -145,8 +135,8 @@ void updateShiftRegisterLeds(String binaryString)
   //Reverse strings. This is to make them in the right order for the shiftout() function (I think) - this seems a bit weird...
   shiftRegisterOneString = reverseString(shiftRegisterOneString);
   shiftRegisterTwoString = reverseString(shiftRegisterTwoString);
-  //Serial.println("Reversed shiftRegisterOneString: "+ shiftRegisterOneString);
-  //Serial.println("Reversed shiftRegisterTwoString: "+ shiftRegisterTwoString);
+  Serial.println("Reversed shiftRegisterOneString: "+ shiftRegisterOneString);
+  Serial.println("Reversed shiftRegisterTwoString: "+ shiftRegisterTwoString);
   
   
   // Convert binary strings to integer
@@ -154,12 +144,12 @@ void updateShiftRegisterLeds(String binaryString)
   int ShiftRegisterTwoInt = binaryStringToInt(shiftRegisterTwoString);
 
   dataArrayOne[0] = ShiftRegisterOneInt;
-  //Serial.print("DataarrayOne: ");
-  //Serial.println(dataArrayOne[0]);
+  Serial.print("DataarrayOne: ");
+  Serial.println(dataArrayOne[0]);
   
   dataArrayTwo[0] = ShiftRegisterTwoInt;
-  //Serial.print("DataarrayTwo: ");
-  //Serial.println(dataArrayTwo[0]);
+  Serial.print("DataarrayTwo: ");
+  Serial.println(dataArrayTwo[0]);
 
     //load the light sequence you want from array
     dataOne = dataArrayOne[0];
@@ -173,5 +163,4 @@ void updateShiftRegisterLeds(String binaryString)
     //return the latch pin high to signal chip that it 
     //no longer needs to listen for information
     digitalWrite(latchPin, 1);
-  
 }

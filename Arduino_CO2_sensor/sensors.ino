@@ -1,7 +1,5 @@
 // Functions for getting data from sensors and determining which leds to light
 
-
-
 /**
  * @return Float with CO2 value as PPM (parts per millie)
  */
@@ -51,7 +49,7 @@ String getLedsCo2(float value){
 /**
  * @return String (binary) with code for temperature leds
  */
- String getLedsTemperature(float value){
+String getLedsTemperature(float value){
   String ledCode = "";
   if(value<21){
     ledCode = "100";
