@@ -39,6 +39,13 @@ int samples = 0;
 int chipSelect = 10; //chipSelect pin for the SD card Reader
 File logWriter; //Data object for logging
 
+/*
+ * GND to GND
+ * CS (Chip select) to 10
+ * MOSI to 11
+ * SCK (Clock) to 13
+ * MISO to 12
+*/
 
 // SHIFT REGISTER config
 //Pin connected to ST_CP of 74HC595
