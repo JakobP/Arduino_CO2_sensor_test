@@ -36,15 +36,15 @@ int samples = 0;
 #include <SD.h> //Load SD card library
 #include<SPI.h> //Load SPI Library
 
-int chipSelect = 10; //chipSelect pin for the SD card Reader
+int chipSelect = 53; //chipSelect pin for the SD card Reader
 File logWriter; //Data object for logging
 
 /*
  * GND to GND
- * CS (Chip select) to 10
- * MOSI to 11
- * SCK (Clock) to 13
- * MISO to 12
+ * CS (Chip select) to 10 UNO / 53 MEGA
+ * MOSI to 11 UNO / 51 MEGA
+ * CLK (SCK) to 13 UNO / 52 MEGA
+ * MISO to 12 UNO / 50 MEGA
 */
 
 // SHIFT REGISTER config
@@ -78,7 +78,8 @@ void setup() {
   blinkAll_2Bytes(1,500);
 
   // Begin writing to SD card
-  SD.begin(10); //Initialize the SD card reader
+  pinMode(53,OUTPUT);
+  SD.begin(53); //Initialize the SD card reader
   writeToLog("*** STARTING NEW LOG ***");
   
   delay(5000);
@@ -94,16 +95,6 @@ void loop() {
   float co2 = getCo2();                 // PPM
   float temperature = getTemperature(); // Degrees Celcius
   float humidity = getHumidity();       // Percentage
-
-  // Print the current calues
-  Serial.print("CO2:\t");
-  Serial.print(co2);
-  Serial.print("\t");
-  Serial.print("Hemperature:\t");
-  Serial.print(temperature);
-  Serial.print("\t");
-  Serial.print("Humidity:\t");
-  Serial.println(humidity);
 
   //Add the sensorvalues to running averages
   averageCo2.addValue(co2);
@@ -131,11 +122,7 @@ void loop() {
   String humidityTest = dtostrf(averageCo2Float, 1, 2, buff);
   String temperatureTest = dtostrf(averageCo2Float, 1, 2, buff);
   // Write data to log
-  writeToLog("Avg. CO2: "+ co2Test);
-  writeToLog("\t");
-  writeToLog("Avg. temperature: "+ humidityTest);
-  writeToLog("\t");
-  writeToLog("Avg. humidity: "+ temperatureTest);
+  writeToLog("Avg. CO2;"+ co2Test + ";" + "Avg. temperature;" + temperatureTest + "Avg. humidity;" + humidityTest);
 
   // Increase the running average sample count
   samples++;
