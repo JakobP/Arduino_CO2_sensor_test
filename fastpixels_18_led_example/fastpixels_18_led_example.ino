@@ -44,70 +44,28 @@ void setup() {
 
 void loop() { 
   // Turn the LED on, then pause
-  leds[0] = CRGB::Blue;
-  leds[1] = CRGB::Blue;
-  leds[2] = CRGB::Blue;
-  leds[3] = CRGB::Blue;
-  leds[4] = CRGB::Blue;
-  leds[5] = CRGB::Blue;
-  leds[6] = CRGB::Blue;
-  leds[7] = CRGB::Blue;
-  leds[8] = CRGB::Blue;
-  leds[9] = CRGB::Blue;
-  leds[10] = CRGB::Blue;
-  leds[11] = CRGB::Blue;
-  leds[12] = CRGB::Blue;
-  leds[13] = CRGB::Blue;
-  leds[14] = CRGB::Blue;
-  leds[15] = CRGB::Blue;
-  leds[16] = CRGB::Blue;
-  leds[17] = CRGB::Blue;
-  leds[18] = CRGB::Blue;
-  FastLED.show();
-  
-  delay(2000);
-  // Now turn the LED off, then pause
-  leds[0] = CRGB::Green;
-  leds[1] = CRGB::Green;
-  leds[2] = CRGB::Green;
-  leds[3] = CRGB::Green;
-  leds[4] = CRGB::Green;
-  leds[5] = CRGB::Green;
-  leds[6] = CRGB::Green;
+  // Humidity
+  leds[0] = CRGB::Red;  //Top
+  leds[1] = CRGB::Red;
+  leds[2] = CRGB::Black;
+  leds[3] = CRGB::Black;
+  leds[4] = CRGB::Black;
+  leds[5] = CRGB::Black;
+
+  // Temperature: Reverse
+  leds[6] = CRGB::Green; // Bottom
   leds[7] = CRGB::Green;
   leds[8] = CRGB::Green;
-  leds[9] = CRGB::Green;
-  leds[10] = CRGB::Green;
-  leds[11] = CRGB::Green;
-  leds[12] = CRGB::Green;
-  leds[13] = CRGB::Green;
+  leds[9] = CRGB::Black;
+  leds[10] = CRGB::Black;
+  leds[11] = CRGB::Black;  // Top
+
+  // CO2
+  leds[12] = CRGB::Black; // Top
+  leds[13] = CRGB::Black;
   leds[14] = CRGB::Green;
   leds[15] = CRGB::Green;
-  leds[16] = CRGB::Green;
-  leds[17] = CRGB::Green;
-  leds[18] = CRGB::Green;
+  leds[16] = CRGB::Black;
+  leds[17] = CRGB::Black;
   FastLED.show();
-  delay(2000);
-  
-  leds[0] = CRGB::Red;
-  leds[1] = CRGB::Red;
-  leds[2] = CRGB::Red;
-  leds[3] = CRGB::Red;
-  leds[4] = CRGB::Red;
-  leds[5] = CRGB::Red;
-  leds[6] = CRGB::Red;
-  leds[7] = CRGB::Red;
-  leds[8] = CRGB::Red;
-  leds[9] = CRGB::Red;
-  leds[10] = CRGB::Red;
-  leds[11] = CRGB::Red;
-  leds[12] = CRGB::Red;
-  leds[13] = CRGB::Red;
-  leds[14] = CRGB::Red;
-  leds[15] = CRGB::Red;
-  leds[16] = CRGB::Red;
-  leds[17] = CRGB::Red;
-  leds[18] = CRGB::Red;
-  FastLED.show();
-  delay(5000);
 }
