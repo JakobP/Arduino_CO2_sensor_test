@@ -53,9 +53,9 @@ void loop() {
   leds[5] = CRGB::Black;
 
   // Temperature: Reverse
-  leds[6] = CRGB::Green; // Bottom
-  leds[7] = CRGB::Green;
-  leds[8] = CRGB::Green;
+  leds[6] = CRGB::Blue; // Bottom
+  leds[7] = CRGB::Blue;
+  leds[8] = CRGB::Black;
   leds[9] = CRGB::Black;
   leds[10] = CRGB::Black;
   leds[11] = CRGB::Black;  // Top
