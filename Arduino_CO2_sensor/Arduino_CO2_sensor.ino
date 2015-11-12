@@ -9,8 +9,9 @@
 // When running, you should wait 30-60 minutes until the value has settled, then get the RZero using gasSensor.getRZero() and define it.
 #include<stdlib.h> // Converting floats to string
 
-#include <MQ135.h>
-#include "DHT.h"
+#include <MQ135.h>    // CO2 sensor
+#include "DHT.h"      // Temperature + humidity sensor
+#include "FastLED.h"  // Led strips
 
 //DHT22 config
 #define DHTTYPE DHT22   // Senor type: DHT 22  (AM2302), AM2321
@@ -21,11 +22,22 @@ DHT dht(DHTPIN, DHTTYPE); // Initialize sensor
 MQ135 gasSensor = MQ135(0);
 float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and change it IN THE MQ135.h LIBRARY. Each sensor is different and this makes the PPM calculation work.
 
+// Fastled config
+#define NUM_LEDS 18 // Number of leds in strip
+
+// For led chips like Neopixels, which have a data line, ground, and power, you just
+// need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
+// ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
+#define DATA_PIN 24
+#define CLOCK_PIN 22
+
+// Define the array of leds
+CRGB leds[NUM_LEDS];
 
 //RunningAverage.h variables
 #include <RunningAverage.h>
 
-int averageSamples = 10;  // Set the number of samples to be used for running averages
+int averageSamples = 5;  // Set the number of samples to be used for running averages
 RunningAverage averageCo2(averageSamples);
 RunningAverage averageTemperature(averageSamples);
 RunningAverage averageHumidity(averageSamples);
@@ -47,24 +59,10 @@ File logWriter; //Data object for logging
  * MISO to 12 UNO / 50 MEGA
 */
 
-// SHIFT REGISTER config
-//Pin connected to ST_CP of 74HC595
-int latchPin = 3;
-//Pin connected to SH_CP of 74HC595
-int clockPin = 5;
-////Pin connected to DS of 74HC595
-int dataPin = 4;
-
-//holders for infromation you're going to pass to shifting function
-byte dataOne;
-byte dataTwo;
-byte dataArrayOne[10];
-byte dataArrayTwo[10];
-
-
 void setup() {
-  pinMode(latchPin, OUTPUT); // FOr shift register. It is used in the loop
   Serial.begin(9600);
+
+  FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS); // Init leds
   
   dht.begin();          // Not sure what this does. Some sort of initialization of the DHT22 temperature/humidity sensor
   
@@ -75,7 +73,6 @@ void setup() {
 
   //function that blinks all the LEDs
   //gets passed the number of blinks and the pause time
-  blinkAll_2Bytes(1,500);
 
   // Begin writing to SD card
   pinMode(53,OUTPUT);
@@ -122,6 +119,8 @@ void loop() {
   String avgCo2String = dtostrf(averageCo2Float, 1, 2, buff);  //1 is mininum width, 2 is characters after decimal point
   String avgHumidityString = dtostrf(averageHumidityFloat, 1, 2, buff);
   String avgTemperatureString = dtostrf(averageTemperatureFloat, 1, 2, buff);
+  
+  
   // Write data to log
   writeToLog(avgCo2String + ";" + avgTemperatureString + ";" + avgHumidityString);
 
@@ -139,16 +138,19 @@ void loop() {
     Serial.println("RESET Running Averages");
   }
 
-  // Setting LEDs for shift register
-  String temperatureBinaryString  = getLedsTemperature(averageTemperatureFloat);
-  String humidityBinaryString     = getLedsHumidity(averageHumidityFloat);
-  String co2BinaryString          = getLedsCo2(averageCo2Float);
-  String paddingBinaryString      = "0000000"; // This is the wires that can be connected to extra leds.
-  
-  String combinedBinaryStringSixteen  = temperatureBinaryString + humidityBinaryString + co2BinaryString + paddingBinaryString;
+setLedsCo2(averageCo2Float);
+setLedsTemperature(averageTemperatureFloat);
+setLedsHumidity(averageHumidityFloat);
 
-  // Send the data for lighting the connect leds to the shift register
-  updateShiftRegisterLeds(combinedBinaryStringSixteen);
-  
+  // CO2
+  /*
+  leds[12] = CRGB::Black; // Top
+  leds[13] = CRGB::Black;
+  leds[14] = CRGB::Green;
+  leds[15] = CRGB::Green;
+  leds[16] = CRGB::Black;
+  leds[17] = CRGB::Black;
+  FastLED.show();
+*/
   delay(2000);
 }

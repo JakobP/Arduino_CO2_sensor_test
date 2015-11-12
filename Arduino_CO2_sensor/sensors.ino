@@ -27,52 +27,83 @@ float getTemperature(){
 /**
  * @return String (binary) with code for CO2 leds
  */
-String getLedsCo2(float value){
-  String ledCode = "";
+void setLedsCo2(float value){
+  
   if(value<1200){
-    ledCode = "100";
-    Serial.println("CO2 below 1200 - ledCode: "+ledCode);
-    return ledCode;
+    leds[0] = CRGB::Black;  //Top
+    leds[1] = CRGB::Black;
+    leds[2] = CRGB::Black;
+    leds[3] = CRGB::Black;
+    leds[4] = CRGB::Green;
+    leds[5] = CRGB::Green;
+    Serial.println("CO2 below 1200");
   }
   if(value>=1200 && value<3000){
-    ledCode = "010";
-    Serial.println("CO2 between 1200 and 3000 - ledCode: "+ledCode);
-    return "010";
+    leds[0] = CRGB::Black;  //Top
+    leds[1] = CRGB::Black;
+    leds[2] = CRGB::Yellow;
+    leds[3] = CRGB::Yellow;
+    leds[4] = CRGB::Black;
+    leds[5] = CRGB::Black;
+    Serial.println("CO2 between 1200 and 3000");
   }
   if(value>=3000){
-    ledCode = "001";
-    Serial.println("CO2 above 3000 - ledCode: "+ledCode);
-    return ledCode;
+    leds[0] = CRGB::Red;  //Top
+    leds[1] = CRGB::Red;
+    leds[2] = CRGB::Black;
+    leds[3] = CRGB::Black;
+    leds[4] = CRGB::Black;
+    leds[5] = CRGB::Black;
+    Serial.println("CO2 above 3000");
   }
+  FastLED.show();
+
 }
 
 /**
  * @return String (binary) with code for temperature leds
  */
-String getLedsTemperature(float value){
-  String ledCode = "";
-  if(value<21){
-    ledCode = "100";
-    Serial.println("Temperature below 21 - ledCode: "+ledCode);
-    return ledCode;
+void setLedsTemperature(float value){
+  if(value<19){
+    // Temperature: Reverse
+    leds[6] = CRGB::Blue; // Bottom
+    leds[7] = CRGB::Blue;
+    leds[8] = CRGB::Black;
+    leds[9] = CRGB::Black;
+    leds[10] = CRGB::Black;
+    leds[11] = CRGB::Black;  // Top
+    
+    Serial.println("Temperature below 19");
   }
-  if(value>=21 && value<23){
-    ledCode = "010";
-    Serial.println("Temperature between 21 and 23 - ledCode: "+ledCode);
-    return ledCode;
+  if(value>=19 && value<21){
+    // Temperature: Reverse
+    leds[6] = CRGB::Green; // Bottom
+    leds[7] = CRGB::Green;
+    leds[8] = CRGB::Green;
+    leds[9] = CRGB::Green;
+    leds[10] = CRGB::Black;
+    leds[11] = CRGB::Black;  // Top
+    Serial.println("Temperature between 19 and 21");
   }
 
-  if(value>=23){
-    ledCode = "001";
-    Serial.println("Temperature above 23 - ledCode: "+ledCode);
-    return ledCode;
+  if(value>=21){
+    // Temperature: Reverse
+    leds[6] = CRGB::Red; // Bottom
+    leds[7] = CRGB::Red;
+    leds[8] = CRGB::Red;
+    leds[9] = CRGB::Red;
+    leds[10] = CRGB::Red;
+    leds[11] = CRGB::Red;  // Top
+    
+    Serial.println("Temperature above 21");
   }
+  FastLED.show();
 }
 
 /**
  * @return String (binary) with code for humidity leds
  */
-String getLedsHumidity(float value){
+String setLedsHumidity(float value){
   String ledCode = "";
 
   if(value>40 && value<60){
