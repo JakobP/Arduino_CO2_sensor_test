@@ -138,19 +138,9 @@ void loop() {
     Serial.println("RESET Running Averages");
   }
 
-setLedsCo2(averageCo2Float);
-setLedsTemperature(averageTemperatureFloat);
-setLedsHumidity(averageHumidityFloat);
+  setLedsCo2(averageCo2Float);
+  setLedsTemperature(averageTemperatureFloat);
+  setLedsHumidity(averageHumidityFloat);
 
-  // CO2
-  /*
-  leds[12] = CRGB::Black; // Top
-  leds[13] = CRGB::Black;
-  leds[14] = CRGB::Green;
-  leds[15] = CRGB::Green;
-  leds[16] = CRGB::Black;
-  leds[17] = CRGB::Black;
-  FastLED.show();
-*/
   delay(2000);
 }
