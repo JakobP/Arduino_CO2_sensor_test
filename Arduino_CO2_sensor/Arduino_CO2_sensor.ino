@@ -9,9 +9,10 @@
 // When running, you should wait 30-60 minutes until the value has settled, then get the RZero using gasSensor.getRZero() and define it.
 #include<stdlib.h> // Converting floats to string
 
-#include <MQ135.h>    // CO2 sensor
-#include "DHT.h"      // Temperature + humidity sensor
-#include "FastLED.h"  // Led strips
+#include <MQ135.h>      // CO2 sensor
+#include "DHT.h"        // Temperature + humidity sensor
+#include "FastLED.h"    // Led strips
+#include <math.h>       // For Apple style breathing led
 
 //DHT22 config
 #define DHTTYPE DHT22   // Senor type: DHT 22  (AM2302), AM2321
@@ -25,14 +26,18 @@ MQ135 gasSensor = MQ135(0);
 // Fastled config
 #define NUM_LEDS 18 // Number of leds in strip
 
+// Breathing led config
+// #define BREATHING_LED_PIN 9
+
+// Initialize the array of leds
+CRGB leds[NUM_LEDS];
+
 // For led chips like Neopixels, which have a data line, ground, and power, you just
 // need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
 // ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
 #define DATA_PIN 24
 #define CLOCK_PIN 22
 
-// Define the array of leds
-CRGB leds[NUM_LEDS];
 
 //RunningAverage.h variables
 #include <RunningAverage.h>
@@ -62,6 +67,8 @@ File logWriter; //Data object for logging
 void setup() {
   Serial.begin(9600);
 
+  //pinMode(BREATHING_LED_PIN, OUTPUT);
+
   FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS); // Init leds
   
   dht.begin();          // Not sure what this does. Some sort of initialization of the DHT22 temperature/humidity sensor
@@ -70,17 +77,16 @@ void setup() {
   averageCo2.clear();
   averageTemperature.clear();
   averageHumidity.clear();
-
-  //function that blinks all the LEDs
-  //gets passed the number of blinks and the pause time
-
+  
   // Begin writing to SD card
   pinMode(53,OUTPUT);
   SD.begin(53); //Initialize the SD card reader
   writeToLog("*** STARTING NEW LOG ***");
   writeToLog("CO2; Temperature; Humidity");
   
-  delay(5000);
+  setAllLedds(CRGB::Green);
+
+  delay(3000);
 }
 
 void loop() {
@@ -142,10 +148,13 @@ void loop() {
   setLedsTemperature(averageTemperatureFloat);
   setLedsHumidity(averageHumidityFloat);
 
-  // Attempting to dynamically set RZERO
-   #undef RZERO
-   #define RZERO 1100
+  
+  delay(1000);
 
-  Serial.println("defined RZERO"+RZERO);
-  delay(2000);
+  // Makes leds blink, so you can see that the code arduino is not frozen.
+  //setAllLedds(CRGB::Black);
+  //delay(1);
+
+  //Make single led "breathe" so you can see that the code is not frozen
+  //ledBreathe(BREATHING_LED_PIN);
 }
