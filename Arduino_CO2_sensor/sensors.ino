@@ -72,7 +72,6 @@ void setLedsTemperature(float value){
     leds[9] = CRGB::Black;
     leds[10] = CRGB::Black;
     leds[11] = CRGB::Black;  // Top
-    
     Serial.println("Temperature below 19");
   }
   if(value>=19 && value<21){
@@ -85,7 +84,6 @@ void setLedsTemperature(float value){
     leds[11] = CRGB::Black;  // Top
     Serial.println("Temperature between 19 and 21");
   }
-
   if(value>=21){
     // Temperature: Reverse
     leds[6] = CRGB::Red; // Bottom
@@ -94,7 +92,6 @@ void setLedsTemperature(float value){
     leds[9] = CRGB::Red;
     leds[10] = CRGB::Red;
     leds[11] = CRGB::Red;  // Top
-    
     Serial.println("Temperature above 21");
   }
   FastLED.show();
@@ -117,11 +114,11 @@ String setLedsHumidity(float value){
   if(value<40){
     leds[0] = CRGB::Black;  //Top
     leds[1] = CRGB::Black;
-    leds[2] = CRGB::Green;
-    leds[3] = CRGB::Green;
-    leds[4] = CRGB::Black;
-    leds[5] = CRGB::Black;
-    Serial.println("Humidity btween 30-40 OR  60-70");
+    leds[2] = CRGB::Black;
+    leds[3] = CRGB::Black;
+    leds[4] = CRGB::Red;
+    leds[5] = CRGB::Red;
+    Serial.println("Humidity below 40");
   }
   if(value>60){
     leds[0] = CRGB::Red;  //Top
@@ -130,7 +127,7 @@ String setLedsHumidity(float value){
     leds[3] = CRGB::Black;
     leds[4] = CRGB::Black;
     leds[5] = CRGB::Black;
-    Serial.println("Humidity below 30 OR above 70");
+    Serial.println("Humidity above 60");
   }
   FastLED.show();
 }

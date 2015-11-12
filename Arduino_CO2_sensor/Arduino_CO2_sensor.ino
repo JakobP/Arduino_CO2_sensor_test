@@ -20,7 +20,7 @@ DHT dht(DHTPIN, DHTTYPE); // Initialize sensor
 
 //MQ135.h config
 MQ135 gasSensor = MQ135(0);
-float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and change it IN THE MQ135.h LIBRARY. Each sensor is different and this makes the PPM calculation work.
+//float rzero = gasSensor.getRZero(); //When setting up, get the rzero value and change it IN THE MQ135.h LIBRARY. Each sensor is different and this makes the PPM calculation work.
 
 // Fastled config
 #define NUM_LEDS 18 // Number of leds in strip
@@ -142,5 +142,10 @@ void loop() {
   setLedsTemperature(averageTemperatureFloat);
   setLedsHumidity(averageHumidityFloat);
 
+  // Attempting to dynamically set RZERO
+   #undef RZERO
+   #define RZERO 1100
+
+  Serial.println("defined RZERO"+RZERO);
   delay(2000);
 }
