@@ -85,8 +85,9 @@ void setup() {
   writeToLog("CO2; Temperature; Humidity");
   
   setAllLedds(CRGB::Green);
-
-  delay(3000);
+  delay(500); 
+  setAllLedds(CRGB::Black);
+  delay(2000);
 }
 
 void loop() {
