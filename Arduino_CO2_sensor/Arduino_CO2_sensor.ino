@@ -82,7 +82,7 @@ void setup() {
   pinMode(53,OUTPUT);
   SD.begin(53); //Initialize the SD card reader
   writeToLog("*** STARTING NEW LOG ***");
-  writeToLog("CO2; Temperature; Humidity");
+  writeToLog("CO2; Temperature; Humidity;RZERO");
   
   setAllLedds(CRGB::Green);
   delay(500); 
@@ -126,10 +126,11 @@ void loop() {
   String avgCo2String = dtostrf(averageCo2Float, 1, 2, buff);  //1 is mininum width, 2 is characters after decimal point
   String avgHumidityString = dtostrf(averageHumidityFloat, 1, 2, buff);
   String avgTemperatureString = dtostrf(averageTemperatureFloat, 1, 2, buff);
+  String rzeroString = dtostrf(gasSensor.getRZero(), 1, 2, buff);
   
   
   // Write data to log
-  writeToLog(avgCo2String + ";" + avgTemperatureString + ";" + avgHumidityString);
+  writeToLog(avgCo2String + ";" + avgTemperatureString + ";" + avgHumidityString + ";" + rzeroString);
 
   // Increase the running average sample count
   samples++;
