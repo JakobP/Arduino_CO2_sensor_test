@@ -151,7 +151,7 @@ void loop() {
   setLedsHumidity(averageHumidityFloat);
 
   
-  delay(1000);
+  delay(5000);
 
   // Makes leds blink, so you can see that the code arduino is not frozen.
   //setAllLedds(CRGB::Black);

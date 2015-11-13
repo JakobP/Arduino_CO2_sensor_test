@@ -7,7 +7,7 @@ void writeToLog(String message)
    if (logWriter)
    {
      int seconds = (millis() + 500) / 1000;
-     delay(250); //Pause between readings.
+     //delay(250); //Pause between readings.
      logWriter.print(seconds);                           //seconds since program started
      logWriter.print(";");                               //write a commma
      logWriter.println(message);                         //message + newline

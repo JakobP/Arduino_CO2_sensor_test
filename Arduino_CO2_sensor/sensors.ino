@@ -20,7 +20,7 @@ float getHumidity(){
  * @return Float temperature in celcius
  */
 float getTemperature(){
-  float temperature = dht.readTemperature();
+  float temperature = dht.readTemperature() - 2.2; // Temperature adjusted 2.2 degrees down, since it seems to consistently measure too high
   return temperature;
 }
 
@@ -100,11 +100,11 @@ void setLedsTemperature(float value){
     Serial.println("Temperature between 20 and 21");
   }
   if(value>=21 && value<22){
-    leds[6] = CRGB::Red; // Bottom
-    leds[7] = CRGB::Red;
-    leds[8] = CRGB::Red;
-    leds[9] = CRGB::Red;
-    leds[10] = CRGB::Red;
+    leds[6] = CRGB::Yellow; // Bottom
+    leds[7] = CRGB::Yellow;
+    leds[8] = CRGB::Yellow;
+    leds[9] = CRGB::Yellow;
+    leds[10] = CRGB::Yellow;
     leds[11] = CRGB::Black;  // Top
     Serial.println("Temperature between 21 and 22");
   }
