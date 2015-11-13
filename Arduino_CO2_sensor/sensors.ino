@@ -28,7 +28,15 @@ float getTemperature(){
  * @return String (binary) with code for humidity leds
  */
 void setLedsHumidity(float value){
-
+ if(value<40){
+    leds[0] = CRGB::Black;  //Top
+    leds[1] = CRGB::Black;
+    leds[2] = CRGB::Black;
+    leds[3] = CRGB::Black;
+    leds[4] = CRGB::Blue;
+    leds[5] = CRGB::Blue;
+    Serial.println("Humidity below 40");
+  }
   if(value>40 && value<60){
     leds[0] = CRGB::Black;  //Top
     leds[1] = CRGB::Black;
@@ -38,18 +46,10 @@ void setLedsHumidity(float value){
     leds[5] = CRGB::Black;
     Serial.println("Humidity between 40-60");
   }
-  if(value<40){
-    leds[0] = CRGB::Black;  //Top
-    leds[1] = CRGB::Black;
-    leds[2] = CRGB::Black;
-    leds[3] = CRGB::Black;
-    leds[4] = CRGB::Red;
-    leds[5] = CRGB::Red;
-    Serial.println("Humidity below 40");
-  }
+ 
   if(value>60){
-    leds[0] = CRGB::Red;  //Top
-    leds[1] = CRGB::Red;
+    leds[0] = CRGB::Blue;  //Top
+    leds[1] = CRGB::Blue;
     leds[2] = CRGB::Black;
     leds[3] = CRGB::Black;
     leds[4] = CRGB::Black;
@@ -126,25 +126,25 @@ void setLedsTemperature(float value){
  */
 void setLedsCo2(float value){
   
-  if(value<1200){
+  if(value<1000){
     leds[12] = CRGB::Black; // Top
     leds[13] = CRGB::Black;
     leds[14] = CRGB::Black;
     leds[15] = CRGB::Black;
     leds[16] = CRGB::Green;
     leds[17] = CRGB::Green;
-    Serial.println("CO2 below 1200");
+    Serial.println("CO2 below 1000");
   }
-  if(value>=1200 && value<3000){
+  if(value>=1000 && value<1800){
     leds[12] = CRGB::Black; // Top
     leds[13] = CRGB::Black;
     leds[14] = CRGB::Yellow;
     leds[15] = CRGB::Yellow;
     leds[16] = CRGB::Black;
     leds[17] = CRGB::Black;
-    Serial.println("CO2 between 1200 and 3000");
+    Serial.println("CO2 between 1000 and 1800");
   }
-  if(value>=3000){
+  if(value>=1800){
     leds[12] = CRGB::Red; // Top
     leds[13] = CRGB::Red;
     leds[14] = CRGB::Black;
